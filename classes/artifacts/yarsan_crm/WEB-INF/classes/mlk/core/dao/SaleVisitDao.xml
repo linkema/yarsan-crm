@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--&lt;!&ndash;/*Column Information*/-->
+<!--&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+
+<!--FIELD            TYPE          COLLATION        NULL    KEY     DEFAULT  Extra   PRIVILEGES                       COMMENT-->
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;  -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;  &#45;&#45;&#45;&#45;&#45;&#45;  &#45;&#45;&#45;&#45;&#45;&#45;  -&#45;&#45;&#45;&#45;&#45;&#45;  &#45;&#45;&#45;&#45;&#45;&#45;  -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;  -&#45;&#45;&#45;&#45;&#45;&#45;-->
+<!--sale_createtime  DATETIME      (NULL)           YES             (NULL)           SELECT,INSERT,UPDATE,REFERENCES         -->
+<!--sale_man         VARCHAR(32)   utf8_general_ci  YES             (NULL)           SELECT,INSERT,UPDATE,REFERENCES         -->
+<!--visit_location   VARCHAR(100)  utf8_general_ci  YES             (NULL)           SELECT,INSERT,UPDATE,REFERENCES         -->
+<!--visit_sum        VARCHAR(32)   utf8_general_ci  YES             (NULL)           SELECT,INSERT,UPDATE,REFERENCES         -->
+
+<!--/*Index Information*/-->
+<!-- -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mlk.core.dao.SaleVisitDao">
+
+    <sql id="selectSaleVisitListWhere">
+        <where>
+            <if test="sale_man != null" >
+                sale_man like "%"#{sale_man}"%"
+            </if>
+            <if test="visit_location != null" >
+                and visit_location = #{visit_location}
+            </if>
+            <if test="visit_sum != null" >
+                and visit_sum = #{visit_sum}
+            </if>
+        </where>
+    </sql>
+    <select id="selectSaleVisitList" parameterType="Salevisit" resultType="Salevisit">
+            SELECT
+            sale_man,
+            visit_location,
+            visit_sum
+            FROM
+            salevisit a
+    <include refid="selectSaleVisitListWhere"/>
+        <if test="start !=null and rows != null">
+        limit #{start},#{rows}
+        </if>
+    </select>
+        <select id="selectSaleVisitListCount" parameterType="Salevisit" resultType="int">
+        select count(*)
+        from salevisit
+        <include refid="selectSaleVisitListWhere"/>
+    </select>
+
+    <select id="getCustomerBySale_man" parameterType="String" resultType="Salevisit">
+    select * from salevisit where sale_man = #{sale_man}
+    </select>
+    <update id="updateSaleVisit" parameterType="Salevisit">
+    update salevisit
+        <set>
+            <if test="sale_man!=null">
+              sale_man=#{sale_man},
+            </if>
+            <if test="visit_location != null" >
+                 visit_location = #{visit_location},
+            </if>
+            <if test="visit_sum != null" >
+                visit_sum = #{visit_sum}
+            </if>
+        </set>
+        where sale_man=#{sale_man}
+    </update>
+    <delete id="deleteSaleVisit" parameterType="String">
+        delete from salevisit where sale_man=#{sale_man}
+  </delete>
+    <insert id="insertSaleVisit" parameterType="salevisit">
+        insert into salevisit (
+        sale_man,
+        visit_location,
+        visit_sum
+        ) values (
+        #{sale_man},
+        #{visit_location},
+        #{visit_sum}
+        )
+    </insert>
+</mapper>

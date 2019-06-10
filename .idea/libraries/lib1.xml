@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Workspaces/MyEclipse 10/Chapter6_/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Workspaces/MyEclipse 10/Chapter6_/lib" recursive="false" />
+  </library>
+</component>
